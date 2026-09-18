@@ -6,6 +6,9 @@ export interface Partner {
   company_name: string
   logo_url: string | null
   contact_email: string | null
+  // Partnerens eget samtykke til at blive vist (med logo) på landingssidens
+  // "Oplevelsespartnere"-sektion — sat/ændret på Firmaprofil-siden.
+  show_on_landing: boolean
   created_at: string
 }
 

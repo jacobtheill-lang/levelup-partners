@@ -7,10 +7,11 @@ import { RewardsListScreen } from './screens/RewardsListScreen'
 import { RewardFormScreen } from './screens/RewardFormScreen'
 import { RedemptionsLogScreen } from './screens/RedemptionsLogScreen'
 import { AdminApprovalScreen } from './screens/AdminApprovalScreen'
+import { ProfileScreen } from './screens/ProfileScreen'
 import { ADMIN_EMAIL } from './config'
 import type { Partner, Reward } from './types'
 
-type View = { name: 'list' } | { name: 'create' } | { name: 'edit'; reward: Reward } | { name: 'redemptions' }
+type View = { name: 'list' } | { name: 'create' } | { name: 'edit'; reward: Reward } | { name: 'redemptions' } | { name: 'profile' }
 
 function NotConfigured() {
   return (
@@ -42,15 +43,19 @@ function App() {
     return () => sub.subscription.unsubscribe()
   }, [])
 
-  useEffect(() => {
+  function refreshPartner() {
     if (!supabase || !session) return
-    const client = supabase
-    client
+    supabase
       .from('partners')
       .select('*')
       .eq('id', session.user.id)
       .maybeSingle()
       .then(({ data }) => setPartner((data as Partner | null) ?? null))
+  }
+
+  useEffect(() => {
+    refreshPartner()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session])
 
   if (!supabaseConfigured) {
@@ -124,11 +129,23 @@ function App() {
           onCreate={() => setView({ name: 'create' })}
           onEdit={(reward) => setView({ name: 'edit', reward })}
           onRedeem={() => setView({ name: 'redemptions' })}
+          onProfile={() => setView({ name: 'profile' })}
         />
       )}
 
       {session && session.user.email !== ADMIN_EMAIL && partner && view.name === 'redemptions' && (
         <RedemptionsLogScreen partnerId={partner.id} onBack={() => setView({ name: 'list' })} />
+      )}
+
+      {session && session.user.email !== ADMIN_EMAIL && partner && view.name === 'profile' && (
+        <ProfileScreen
+          partner={partner}
+          onSaved={() => {
+            refreshPartner()
+            setView({ name: 'list' })
+          }}
+          onBack={() => setView({ name: 'list' })}
+        />
       )}
 
       {session && session.user.email !== ADMIN_EMAIL && partner && view.name === 'create' && (

@@ -7,9 +7,10 @@ interface Props {
   onCreate: () => void
   onEdit: (reward: Reward) => void
   onRedeem: () => void
+  onProfile: () => void
 }
 
-export function RewardsListScreen({ partnerId, onCreate, onEdit, onRedeem }: Props) {
+export function RewardsListScreen({ partnerId, onCreate, onEdit, onRedeem, onProfile }: Props) {
   const [rewards, setRewards] = useState<Reward[] | null>(null)
   const [error, setError] = useState<string | null>(null)
 
@@ -60,6 +61,9 @@ export function RewardsListScreen({ partnerId, onCreate, onEdit, onRedeem }: Pro
           </button>
           <button type="button" className="btn btn-ghost" onClick={onRedeem}>
             Indløsninger
+          </button>
+          <button type="button" className="btn btn-ghost" onClick={onProfile}>
+            Firmaprofil
           </button>
         </div>
       </div>
