@@ -7,11 +7,14 @@ import { RewardsListScreen } from './screens/RewardsListScreen'
 import { RewardFormScreen } from './screens/RewardFormScreen'
 import { RedemptionsLogScreen } from './screens/RedemptionsLogScreen'
 import { AdminApprovalScreen } from './screens/AdminApprovalScreen'
+import { AdminInboxScreen } from './screens/AdminInboxScreen'
+import { AdminAnalyticsScreen } from './screens/AdminAnalyticsScreen'
 import { ProfileScreen } from './screens/ProfileScreen'
 import { ADMIN_EMAIL } from './config'
 import type { Partner, Reward } from './types'
 
 type View = { name: 'list' } | { name: 'create' } | { name: 'edit'; reward: Reward } | { name: 'redemptions' } | { name: 'profile' }
+type AdminTab = 'approvals' | 'inbox' | 'analytics'
 
 function NotConfigured() {
   return (
@@ -31,6 +34,7 @@ function App() {
   const [session, setSession] = useState<Session | null | undefined>(undefined) // undefined = ukendt endnu
   const [partner, setPartner] = useState<Partner | null | undefined>(undefined)
   const [view, setView] = useState<View>({ name: 'list' })
+  const [adminTab, setAdminTab] = useState<AdminTab>('approvals')
 
   useEffect(() => {
     if (!supabase) return
@@ -113,7 +117,36 @@ function App() {
 
       {session === null && <LoginScreen />}
 
-      {session && session.user.email === ADMIN_EMAIL && <AdminApprovalScreen />}
+      {session && session.user.email === ADMIN_EMAIL && (
+        <>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <button
+              type="button"
+              className={adminTab === 'approvals' ? 'btn btn-primary btn-sm' : 'btn btn-ghost btn-sm'}
+              onClick={() => setAdminTab('approvals')}
+            >
+              Godkendelser
+            </button>
+            <button
+              type="button"
+              className={adminTab === 'inbox' ? 'btn btn-primary btn-sm' : 'btn btn-ghost btn-sm'}
+              onClick={() => setAdminTab('inbox')}
+            >
+              Indbakke
+            </button>
+            <button
+              type="button"
+              className={adminTab === 'analytics' ? 'btn btn-primary btn-sm' : 'btn btn-ghost btn-sm'}
+              onClick={() => setAdminTab('analytics')}
+            >
+              Statistik
+            </button>
+          </div>
+          {adminTab === 'approvals' && <AdminApprovalScreen />}
+          {adminTab === 'inbox' && <AdminInboxScreen />}
+          {adminTab === 'analytics' && <AdminAnalyticsScreen />}
+        </>
+      )}
 
       {session && session.user.email !== ADMIN_EMAIL && partner === undefined && (
         <p className="subtle">Henter…</p>
