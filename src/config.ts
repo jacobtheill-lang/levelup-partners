@@ -1,11 +1,74 @@
-// Kurs mellem kroner og point. Der findes ikke noget "rigtigt" facit for
-// den her — det er en forretningsbeslutning, ikke en teknisk en. Tallet
-// herunder er sat løst efter det eksisterende statiske eksempel-katalog
-// (skaerm-app/src/data/rewards.ts), hvor fx en is til 35-40 kr. kostede
-// ca. 120 point. Ret bare tallet, hvis I vil have point til at føles
+// --- Kr → point: degressiv kurve ------------------------------------------
+//
+// Der findes ikke noget "rigtigt" facit her — det er en forretningsbeslutning,
+// ikke en teknisk en. Men det er BEVIDST ikke længere én flad sats (kr × X),
+// fordi en flad sats tvinger forholdet mellem "hvor mange dage tager den
+// billigste" og "hvor mange dage tager den dyreste" til at være nøjagtig det
+// samme som forholdet mellem priserne — en oplevelse til 2000 kr ville tage
+// 100x så lang tid som en til 20 kr, uanset satsen. Det er urealistisk for et
+// barn (og kedeligt).
+//
+// I stedet FALDER antal point pr. krone, jo dyrere oplevelsen er:
+//  - Billige oplevelser (is, havnebad) føles hurtigt opnåelige.
+//  - Dyre oplevelser (Tivoli, museum for hele familien) er stadig inden for
+//    rækkevidde på et par måneders konsistent spil — ikke ni.
+//  - Som en sidegevinst "kamuflerer" det den præcise kr-værdi af en given
+//    oplevelse: der er ikke én division, der afslører den.
+//
+// Tabellen herunder er identisk med DEFAULT_POINTS_PER_KR i
+// levelup-motor-simulator.html (simulatoren Jacob har brugt til at
+// kalibrere tempoet) — HOLD DEM I SYNC, hvis satserne justeres, og
+// opdatér samme tal i skaerm-app/src/data/rewards.ts's kommentar-note.
+//
+// Ret roligt tallene i tabellen, hvis I vil have point til at føles
 // "dyrere" eller "billigere" — det påvirker kun NYE/gemte rewards fra det
 // øjeblik, I ændrer det; allerede oprettede rewards beholder deres pris.
-export const POINTS_PER_KRONE = 150
+const RATE_TABLE: { kr: number; pointsPerKr: number }[] = [
+  { kr: 10, pointsPerKr: 160 },
+  { kr: 20, pointsPerKr: 140 },
+  { kr: 50, pointsPerKr: 110 },
+  { kr: 100, pointsPerKr: 90 },
+  { kr: 250, pointsPerKr: 65 },
+  { kr: 500, pointsPerKr: 50 },
+  { kr: 1000, pointsPerKr: 38 },
+  { kr: 2000, pointsPerKr: 27 },
+]
+
+// Glidende (log-log) interpolation mellem punkterne i RATE_TABLE, så enhver
+// kr-værdi (også dem der ikke rammer et tabel-punkt præcist) får en sats,
+// der falder jævnt i stedet for at "hoppe" ved hvert tærskel-punkt.
+function interpolateRate(valueDkk: number): number {
+  const table = RATE_TABLE
+  if (valueDkk <= table[0].kr) return table[0].pointsPerKr
+
+  const last = table[table.length - 1]
+  if (valueDkk >= last.kr) {
+    // Over 2000 kr (endnu ikke brugt i praksis, men skal ikke krakke):
+    // fortsæt samme fald som sidste segment, men aldrig under det halve af
+    // sidste sats, så meget dyre oplevelser ikke ender med at "koste 0".
+    const prev = table[table.length - 2]
+    const logSlope =
+      (Math.log(last.pointsPerKr) - Math.log(prev.pointsPerKr)) / (Math.log(last.kr) - Math.log(prev.kr))
+    const extrapolated = last.pointsPerKr * Math.exp(logSlope * (Math.log(valueDkk) - Math.log(last.kr)))
+    return Math.max(extrapolated, last.pointsPerKr * 0.5)
+  }
+
+  for (let i = 0; i < table.length - 1; i++) {
+    const a = table[i]
+    const b = table[i + 1]
+    if (valueDkk >= a.kr && valueDkk <= b.kr) {
+      const t = (Math.log(valueDkk) - Math.log(a.kr)) / (Math.log(b.kr) - Math.log(a.kr))
+      return a.pointsPerKr + t * (b.pointsPerKr - a.pointsPerKr)
+    }
+  }
+  return last.pointsPerKr
+}
+
+/** Konverter en oplevelses værdi i kr. til dens pointpris via den degressive kurve. */
+export function pointsForValue(valueDkk: number): number {
+  if (!Number.isFinite(valueDkk) || valueDkk <= 0) return 0
+  return Math.round(valueDkk * interpolateRate(valueDkk))
+}
 
 // Den eneste konto, der ser godkendelses-skærmen i stedet for den normale
 // partner-visning, når den logger ind. Skal matche PRÆCIS den mail-adresse,

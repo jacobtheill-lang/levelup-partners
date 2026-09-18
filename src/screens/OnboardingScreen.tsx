@@ -58,6 +58,12 @@ export function OnboardingScreen({ user, onDone }: Props) {
         Sidste skridt — hvad hedder jeres virksomhed? Det er navnet, børnene ser under jeres
         oplevelser.
       </p>
+      <div className="info-box" style={{ marginBottom: 18 }}>
+        <p style={{ margin: 0 }}>
+          LevelUp handler om rigtige oplevelser, børn og familier oplever sammen — ikke bare
+          slik og sodavand. I opretter jeres første oplevelse på næste skærm.
+        </p>
+      </div>
       <form onSubmit={handleSubmit}>
         <div className="field">
           <label htmlFor="company">Virksomhedsnavn</label>

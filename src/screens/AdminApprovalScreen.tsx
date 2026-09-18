@@ -70,6 +70,16 @@ export function AdminApprovalScreen() {
         </p>
       </div>
 
+      <div className="info-box" style={{ marginBottom: 16 }}>
+        <p style={{ margin: 0, fontWeight: 600 }}>Principper at holde øje med her</p>
+        <p className="subtle" style={{ margin: '4px 0 0' }}>
+          LevelUp skal primært give <strong>oplevelser</strong> — noget børnene gør eller
+          oplever, ikke bare forbruger. Afvis eller bed partneren justere, hvis en oplevelse
+          reelt bare er slik/sodavand/fastfood uden en aktivitet omkring, eller hvis pris/points
+          ikke matcher værdien.
+        </p>
+      </div>
+
       {error && <div className="error-box" style={{ marginBottom: 14 }}>{error}</div>}
 
       <div className="card">
@@ -89,7 +99,7 @@ export function AdminApprovalScreen() {
             <div className="reward-row-info">
               <p className="reward-row-name">{r.name}</p>
               <p className="reward-row-meta">
-                {r.venue} · {r.value_dkk} kr. ·{' '}
+                {r.venue} · {r.value_dkk} kr. · {r.price_points} point ·{' '}
                 {r.partners?.company_name ?? 'Ukendt partner'}
                 {r.partners?.contact_email ? ` (${r.partners.contact_email})` : ''}
               </p>

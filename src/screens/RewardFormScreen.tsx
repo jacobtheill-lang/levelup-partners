@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { uploadRewardImage } from '../lib/uploadImage'
 import { AddressField } from '../components/AddressField'
-import { POINTS_PER_KRONE } from '../config'
+import { pointsForValue } from '../config'
 import type { Reward, RewardFormValues } from '../types'
 
 interface Props {
@@ -72,7 +72,7 @@ export function RewardFormScreen({ partnerId, existing, onSaved, onCancel }: Pro
 
       const valueDkk = Number(values.value_dkk)
       if (!Number.isFinite(valueDkk) || valueDkk <= 0) throw new Error('Angiv en værdi i kr. (større end 0).')
-      const price = Math.round(valueDkk * POINTS_PER_KRONE)
+      const price = pointsForValue(valueDkk)
       const quantityTotal = values.quantity_total.trim() === '' ? null : Number(values.quantity_total)
       if (quantityTotal !== null && (!Number.isFinite(quantityTotal) || quantityTotal < 0)) {
         throw new Error('Antal skal være et tal, eller stå tomt for ubegrænset.')
@@ -119,6 +119,17 @@ export function RewardFormScreen({ partnerId, existing, onSaved, onCancel }: Pro
           ? 'Ændrer du noget herunder, skal oplevelsen godkendes af LevelUp igen, før ændringen er synlig for børnene.'
           : 'Når du opretter oplevelsen, skal LevelUp lige godkende den (brand-fit + at pris/points passer), før den vises til børnene.'}
       </p>
+      <div className="info-box" style={{ marginBottom: 18 }}>
+        <p style={{ margin: 0, fontWeight: 600 }}>Hvad slags oplevelser leder vi efter?</p>
+        <p className="subtle" style={{ margin: '4px 0 0' }}>
+          LevelUp er lavet til at give børn og familier <strong>rigtige oplevelser</strong> —
+          noget man gør eller oplever sammen (en aktivitet, en entré, en time i naturen eller
+          byen). Undgå slik, sodavand og anden usund mad/drikke som selve præmien — forældrene
+          er med i appen, og de melder fra, hvis den fyldes med den slags. Et lille traktement
+          som en del af en større oplevelse (fx en is efter havnebadet) er fint, men bør ikke stå
+          alene som oplevelsen.
+        </p>
+      </div>
       <form onSubmit={handleSubmit}>
         <div className="field">
           <label htmlFor="thumb">Billede</label>
@@ -165,7 +176,12 @@ export function RewardFormScreen({ partnerId, existing, onSaved, onCancel }: Pro
         <div className="field">
           <label htmlFor="value">Værdi (kr.)</label>
           <input id="value" type="number" min={1} step="1" required placeholder="fx 40" value={values.value_dkk} onChange={(e) => update('value_dkk', e.target.value)} />
-          <p className="field-hint">Den reelle værdi af oplevelsen i kroner.</p>
+          <p className="field-hint">
+            Den reelle værdi af oplevelsen i kroner.
+            {Number(values.value_dkk) > 0 && (
+              <> Koster ca. <strong>{pointsForValue(Number(values.value_dkk))} point</strong> i appen.</>
+            )}
+          </p>
         </div>
 
         <div className="field-row">
