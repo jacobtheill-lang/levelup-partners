@@ -63,15 +63,37 @@ function App() {
   return (
     <div className="portal">
       <div className="portal-topbar">
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <a href="https://mit-levelup.vercel.app/landing.html" className="top-link">
-            ← Til landingssiden
-          </a>
-          <p className="brand">
-            Partner-portal
-            <small>LevelUp</small>
-          </p>
-        </div>
+        <a
+          href="https://mit-levelup.vercel.app/landing.html"
+          title="Til landingssiden"
+          style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}
+        >
+          <div
+            style={{
+              width: 34,
+              height: 34,
+              flex: 'none',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: '#ffb703',
+              borderRadius: 10,
+              transform: 'rotate(-6deg)',
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2b2420" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M6 15l6-8 6 8" />
+            </svg>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+            <div style={{ fontFamily: '"Baloo 2", ui-rounded, system-ui, sans-serif', fontWeight: 800, fontSize: 18, color: '#2b2420', lineHeight: 1 }}>LevelUp</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+              <div style={{ width: 9, height: 2, borderRadius: 2, background: '#26c281' }} />
+              <div style={{ fontWeight: 700, fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#148f5e' }}>Moments</div>
+            </div>
+          </div>
+          <span className="subtle" style={{ marginLeft: 6, fontSize: 13 }}>Partner-portal</span>
+        </a>
         {session && (
           <button type="button" className="top-link" onClick={() => client.auth.signOut()}>
             Log ud

@@ -34,7 +34,6 @@ export interface RewardFormValues {
   name: string
   venue: string
   description: string
-  tier: RewardTier
   value_dkk: string
   quantity_total: string // tom = ubegrænset
   expires_at: string // tom = intet udløb

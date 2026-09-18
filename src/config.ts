@@ -5,4 +5,4 @@
 // ca. 120 point. Ret bare tallet, hvis I vil have point til at føles
 // "dyrere" eller "billigere" — det påvirker kun NYE/gemte rewards fra det
 // øjeblik, I ændrer det; allerede oprettede rewards beholder deres pris.
-export const POINTS_PER_KRONE = 3
+export const POINTS_PER_KRONE = 150

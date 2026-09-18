@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { uploadRewardImage } from '../lib/uploadImage'
 import { POINTS_PER_KRONE } from '../config'
-import type { Reward, RewardFormValues, RewardTier } from '../types'
+import type { Reward, RewardFormValues } from '../types'
 
 interface Props {
   partnerId: string
@@ -13,13 +13,12 @@ interface Props {
 
 function toFormValues(r: Reward | null): RewardFormValues {
   if (!r) {
-    return { name: '', venue: '', description: '', tier: 'mellem', value_dkk: '', quantity_total: '', expires_at: '', active: true }
+    return { name: '', venue: '', description: '', value_dkk: '', quantity_total: '', expires_at: '', active: true }
   }
   return {
     name: r.name,
     venue: r.venue,
     description: r.description ?? '',
-    tier: r.tier,
     value_dkk: String(r.value_dkk),
     quantity_total: r.quantity_total === null ? '' : String(r.quantity_total),
     expires_at: r.expires_at ?? '',
@@ -70,7 +69,10 @@ export function RewardFormScreen({ partnerId, existing, onSaved, onCancel }: Pro
         venue: values.venue.trim(),
         description: values.description.trim() || null,
         image_url: imageUrl,
-        tier: values.tier,
+        // Ingen "tier" her med vilje: den kategorisering (lille/mellem/stor)
+        // sætter LevelUp selv, typisk i forbindelse med godkendelsen — en
+        // partner skal ikke bruge tid på at gætte den, og en redigering skal
+        // ikke ved et uheld overskrive en kategori, admin allerede har sat.
         value_dkk: valueDkk,
         price_points: price,
         quantity_total: quantityTotal,
@@ -128,24 +130,10 @@ export function RewardFormScreen({ partnerId, existing, onSaved, onCancel }: Pro
           <textarea id="description" placeholder="fx gælder alle hverdage, én pr. barn, skal vises inden kl. 18" value={values.description} onChange={(e) => update('description', e.target.value)} />
         </div>
 
-        <div className="field-row">
-          <div className="field">
-            <label htmlFor="tier">Størrelse</label>
-            <select id="tier" value={values.tier} onChange={(e) => update('tier', e.target.value as RewardTier)}>
-              <option value="lille">Lille oplevelse</option>
-              <option value="mellem">Mellem oplevelse</option>
-              <option value="stor">Stor oplevelse</option>
-            </select>
-          </div>
-          <div className="field">
-            <label htmlFor="value">Værdi (kr.)</label>
-            <input id="value" type="number" min={1} step="1" required placeholder="fx 40" value={values.value_dkk} onChange={(e) => update('value_dkk', e.target.value)} />
-            <p className="field-hint">
-              {values.value_dkk.trim() !== '' && Number.isFinite(Number(values.value_dkk))
-                ? `≈ ${Math.round(Number(values.value_dkk) * POINTS_PER_KRONE)} point (kurs: ${POINTS_PER_KRONE} point pr. kr.)`
-                : `Kurs: ${POINTS_PER_KRONE} point pr. kr. — se config.ts for at ændre den`}
-            </p>
-          </div>
+        <div className="field">
+          <label htmlFor="value">Værdi (kr.)</label>
+          <input id="value" type="number" min={1} step="1" required placeholder="fx 40" value={values.value_dkk} onChange={(e) => update('value_dkk', e.target.value)} />
+          <p className="field-hint">Den reelle værdi af oplevelsen i kroner.</p>
         </div>
 
         <div className="field-row">
