@@ -59,7 +59,7 @@ export function RewardsListScreen({ partnerId, onCreate, onEdit, onRedeem }: Pro
             + Ny oplevelse
           </button>
           <button type="button" className="btn btn-ghost" onClick={onRedeem}>
-            Indløs kode
+            Indløsninger
           </button>
         </div>
       </div>
