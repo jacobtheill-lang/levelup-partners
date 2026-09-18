@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { uploadRewardImage } from '../lib/uploadImage'
+import { AddressField } from '../components/AddressField'
 import { POINTS_PER_KRONE } from '../config'
 import type { Reward, RewardFormValues } from '../types'
 
@@ -13,11 +14,25 @@ interface Props {
 
 function toFormValues(r: Reward | null): RewardFormValues {
   if (!r) {
-    return { name: '', venue: '', description: '', value_dkk: '', quantity_total: '', expires_at: '', active: true }
+    return {
+      name: '',
+      venue: '',
+      venue_address: '',
+      venue_lat: null,
+      venue_lng: null,
+      description: '',
+      value_dkk: '',
+      quantity_total: '',
+      expires_at: '',
+      active: true,
+    }
   }
   return {
     name: r.name,
     venue: r.venue,
+    venue_address: r.venue_address ?? '',
+    venue_lat: r.venue_lat,
+    venue_lng: r.venue_lng,
     description: r.description ?? '',
     value_dkk: String(r.value_dkk),
     quantity_total: r.quantity_total === null ? '' : String(r.quantity_total),
@@ -67,6 +82,9 @@ export function RewardFormScreen({ partnerId, existing, onSaved, onCancel }: Pro
         partner_id: partnerId,
         name: values.name.trim(),
         venue: values.venue.trim(),
+        venue_address: values.venue_address.trim() || null,
+        venue_lat: values.venue_lat,
+        venue_lng: values.venue_lng,
         description: values.description.trim() || null,
         image_url: imageUrl,
         // Ingen "tier" her med vilje: den kategorisering (lille/mellem/stor)
@@ -123,6 +141,20 @@ export function RewardFormScreen({ partnerId, existing, onSaved, onCancel }: Pro
         <div className="field">
           <label htmlFor="venue">Sted / afdeling</label>
           <input id="venue" type="text" required placeholder="fx Christianshavns Is" value={values.venue} onChange={(e) => update('venue', e.target.value)} />
+        </div>
+
+        <div className="field">
+          <label htmlFor="venue_address">Adresse</label>
+          <AddressField
+            value={values.venue_address}
+            onChange={(address, lat, lng) => {
+              setValues((v) => ({ ...v, venue_address: address, venue_lat: lat, venue_lng: lng }))
+            }}
+          />
+          <p className="field-hint">
+            Søg og vælg jeres adresse fra listen, så børnene kan finde præcis derhen i appen. Skriver
+            I bare fritekst uden at vælge et forslag, gemmes teksten stadig, men uden kort-link.
+          </p>
         </div>
 
         <div className="field">

@@ -91,6 +91,11 @@ export function RewardsListScreen({ partnerId, onCreate, onEdit, onRedeem }: Pro
                   {TIER_LABEL[r.tier]} · {r.value_dkk} kr. ≈ {r.price_points} point ·{' '}
                   {r.quantity_total === null ? 'ubegrænset antal' : `${r.quantity_redeemed}/${r.quantity_total} indløst`}
                 </p>
+                <p className="reward-row-meta">
+                  {r.venue_address
+                    ? `📍 ${r.venue_address}${r.venue_lat == null ? ' (ikke valgt fra listen — intet kort-link)' : ''}`
+                    : '📍 Ingen adresse angivet endnu'}
+                </p>
                 <div style={{ display: 'flex', gap: 6, marginTop: 6, flexWrap: 'wrap' }}>
                   <span className={`badge badge-${r.status}`}>{STATUS_LABEL[r.status]}</span>
                   <span className={`badge ${r.active ? 'badge-active' : 'badge-inactive'}`}>{r.active ? 'Aktiv' : 'Slået fra'}</span>

@@ -14,6 +14,13 @@ export interface Reward {
   partner_id: string
   name: string
   venue: string
+  // Opslået adresse (OpenStreetMap/Nominatim, gratis, intet API-nøgle-krav —
+  // se AddressField.tsx). venue_lat/venue_lng er null, hvis partneren aldrig
+  // valgte et forslag fra søgningen, kun tastede fritekst. Bruges i
+  // børneappen til et "Find derhen"-link, der åbner Google Maps.
+  venue_address: string | null
+  venue_lat: number | null
+  venue_lng: number | null
   description: string | null
   image_url: string | null
   tier: RewardTier
@@ -33,6 +40,9 @@ export interface Reward {
 export interface RewardFormValues {
   name: string
   venue: string
+  venue_address: string
+  venue_lat: number | null
+  venue_lng: number | null
   description: string
   value_dkk: string
   quantity_total: string // tom = ubegrænset
