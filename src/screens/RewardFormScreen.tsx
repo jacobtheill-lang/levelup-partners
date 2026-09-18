@@ -94,6 +94,11 @@ export function RewardFormScreen({ partnerId, existing, onSaved, onCancel }: Pro
   return (
     <div className="card">
       <p className="title-lg">{existing ? 'Redigér oplevelse' : 'Ny oplevelse'}</p>
+      <p className="subtle" style={{ marginBottom: 18 }}>
+        {existing
+          ? 'Ændrer du noget herunder, skal oplevelsen godkendes af LevelUp igen, før ændringen er synlig for børnene.'
+          : 'Når du opretter oplevelsen, skal LevelUp lige godkende den (brand-fit + at pris/points passer), før den vises til børnene.'}
+      </p>
       <form onSubmit={handleSubmit}>
         <div className="field">
           <label htmlFor="thumb">Billede</label>
@@ -159,7 +164,7 @@ export function RewardFormScreen({ partnerId, existing, onSaved, onCancel }: Pro
 
         <label className="checkbox-row" style={{ marginBottom: 18 }}>
           <input type="checkbox" checked={values.active} onChange={(e) => update('active', e.target.checked)} />
-          Aktiv — synlig for børnene i appen
+          Aktiv — vises til børnene i appen, når den er godkendt
         </label>
 
         {error && <div className="error-box" style={{ marginBottom: 14 }}>{error}</div>}
