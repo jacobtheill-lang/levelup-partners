@@ -63,10 +63,15 @@ function App() {
   return (
     <div className="portal">
       <div className="portal-topbar">
-        <p className="brand">
-          Partner-portal
-          <small>LevelUp</small>
-        </p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <a href="https://mit-levelup.vercel.app/landing.html" className="top-link">
+            ← Til landingssiden
+          </a>
+          <p className="brand">
+            Partner-portal
+            <small>LevelUp</small>
+          </p>
+        </div>
         {session && (
           <button type="button" className="top-link" onClick={() => client.auth.signOut()}>
             Log ud
