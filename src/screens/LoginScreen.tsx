@@ -58,8 +58,9 @@ export function LoginScreen() {
     <div className="card">
       <p className="title-lg">Log ind som partner</p>
       <p className="subtle" style={{ marginBottom: 18 }}>
-        Indtast jeres e-mail, så sender vi et login-link. Ny hos LevelUp? Samme formular opretter
-        automatisk en konto til jer — I udfylder jeres oplysninger på næste skærm.
+        Skriv jeres e-mail herunder, så får I et login-link med det samme (mailen I modtager kommer
+        fra Supabase). Første gang? Kontoen oprettes automatisk, og I udfylder jeres oplysninger på
+        næste skærm.
       </p>
       <form onSubmit={handleSubmit}>
         <div className="field">
