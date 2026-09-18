@@ -6,9 +6,10 @@ interface Props {
   partnerId: string
   onCreate: () => void
   onEdit: (reward: Reward) => void
+  onRedeem: () => void
 }
 
-export function RewardsListScreen({ partnerId, onCreate, onEdit }: Props) {
+export function RewardsListScreen({ partnerId, onCreate, onEdit, onRedeem }: Props) {
   const [rewards, setRewards] = useState<Reward[] | null>(null)
   const [error, setError] = useState<string | null>(null)
 
@@ -53,9 +54,14 @@ export function RewardsListScreen({ partnerId, onCreate, onEdit }: Props) {
         <p className="subtle">
           {rewards === null ? 'Henter…' : `${rewards.length} oplevelse${rewards.length === 1 ? '' : 'r'} · ${totalRedemptions} indløst i alt`}
         </p>
-        <button type="button" className="btn btn-primary" style={{ marginTop: 14 }} onClick={onCreate}>
-          + Ny oplevelse
-        </button>
+        <div style={{ display: 'flex', gap: 8, marginTop: 14, flexWrap: 'wrap' }}>
+          <button type="button" className="btn btn-primary" onClick={onCreate}>
+            + Ny oplevelse
+          </button>
+          <button type="button" className="btn btn-ghost" onClick={onRedeem}>
+            Indløs kode
+          </button>
+        </div>
       </div>
 
       {error && <div className="error-box" style={{ marginBottom: 14 }}>{error}</div>}

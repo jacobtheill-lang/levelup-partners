@@ -5,11 +5,12 @@ import { LoginScreen } from './screens/LoginScreen'
 import { OnboardingScreen } from './screens/OnboardingScreen'
 import { RewardsListScreen } from './screens/RewardsListScreen'
 import { RewardFormScreen } from './screens/RewardFormScreen'
+import { RedeemCodeScreen } from './screens/RedeemCodeScreen'
 import { AdminApprovalScreen } from './screens/AdminApprovalScreen'
 import { ADMIN_EMAIL } from './config'
 import type { Partner, Reward } from './types'
 
-type View = { name: 'list' } | { name: 'create' } | { name: 'edit'; reward: Reward }
+type View = { name: 'list' } | { name: 'create' } | { name: 'edit'; reward: Reward } | { name: 'redeem' }
 
 function NotConfigured() {
   return (
@@ -122,7 +123,12 @@ function App() {
           partnerId={partner.id}
           onCreate={() => setView({ name: 'create' })}
           onEdit={(reward) => setView({ name: 'edit', reward })}
+          onRedeem={() => setView({ name: 'redeem' })}
         />
+      )}
+
+      {session && session.user.email !== ADMIN_EMAIL && partner && view.name === 'redeem' && (
+        <RedeemCodeScreen onBack={() => setView({ name: 'list' })} />
       )}
 
       {session && session.user.email !== ADMIN_EMAIL && partner && view.name === 'create' && (
