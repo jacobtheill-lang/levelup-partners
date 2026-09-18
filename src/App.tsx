@@ -5,6 +5,8 @@ import { LoginScreen } from './screens/LoginScreen'
 import { OnboardingScreen } from './screens/OnboardingScreen'
 import { RewardsListScreen } from './screens/RewardsListScreen'
 import { RewardFormScreen } from './screens/RewardFormScreen'
+import { AdminApprovalScreen } from './screens/AdminApprovalScreen'
+import { ADMIN_EMAIL } from './config'
 import type { Partner, Reward } from './types'
 
 type View = { name: 'list' } | { name: 'create' } | { name: 'edit'; reward: Reward }
@@ -105,13 +107,17 @@ function App() {
 
       {session === null && <LoginScreen />}
 
-      {session && partner === undefined && <p className="subtle">Henter…</p>}
+      {session && session.user.email === ADMIN_EMAIL && <AdminApprovalScreen />}
 
-      {session && partner === null && (
+      {session && session.user.email !== ADMIN_EMAIL && partner === undefined && (
+        <p className="subtle">Henter…</p>
+      )}
+
+      {session && session.user.email !== ADMIN_EMAIL && partner === null && (
         <OnboardingScreen user={session.user} onDone={() => setPartner(undefined)} />
       )}
 
-      {session && partner && view.name === 'list' && (
+      {session && session.user.email !== ADMIN_EMAIL && partner && view.name === 'list' && (
         <RewardsListScreen
           partnerId={partner.id}
           onCreate={() => setView({ name: 'create' })}
@@ -119,7 +125,7 @@ function App() {
         />
       )}
 
-      {session && partner && view.name === 'create' && (
+      {session && session.user.email !== ADMIN_EMAIL && partner && view.name === 'create' && (
         <RewardFormScreen
           partnerId={partner.id}
           existing={null}
@@ -128,7 +134,7 @@ function App() {
         />
       )}
 
-      {session && partner && view.name === 'edit' && (
+      {session && session.user.email !== ADMIN_EMAIL && partner && view.name === 'edit' && (
         <RewardFormScreen
           partnerId={partner.id}
           existing={view.reward}
