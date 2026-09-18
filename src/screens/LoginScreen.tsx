@@ -58,8 +58,7 @@ export function LoginScreen() {
     <div className="card">
       <p className="title-lg">Log ind som partner</p>
       <p className="subtle" style={{ marginBottom: 18 }}>
-        Skriv jeres e-mail herunder, så får I et login-link med det samme. Første gang? Kontoen
-        oprettes automatisk, og I udfylder jeres oplysninger på næste skærm.
+        Skriv jeres e-mail herunder, så får I et login-link med det samme.
       </p>
       <form onSubmit={handleSubmit}>
         <div className="field">
