@@ -65,7 +65,7 @@ function App() {
       <div className="portal-topbar">
         <p className="brand">
           Partner-portal
-          <small>Skærm til Oplevelse</small>
+          <small>LevelUp</small>
         </p>
         {session && (
           <button type="button" className="top-link" onClick={() => client.auth.signOut()}>

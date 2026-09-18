@@ -1,4 +1,4 @@
-# Partner-portal — Skærm til Oplevelse
+# Partner-portal — LevelUp
 
 Simpel webside hvor I (og senere jeres partnere) opretter og redigerer
 oplevelser: billede, firmalogo/navn, betingelser, udløbsdato, en kr.-værdi
