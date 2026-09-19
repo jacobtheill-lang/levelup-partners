@@ -64,10 +64,38 @@ function interpolateRate(valueDkk: number): number {
   return last.pointsPerKr
 }
 
-/** Konverter en oplevelses værdi i kr. til dens pointpris via den degressive kurve. */
+// --- Afrunding til "pæne" point-tiers ---------------------------------------
+//
+// Den degressive kurve ovenfor afgør stadig HVOR DYR en oplevelse føles
+// relativt til de andre — men det rå resultat (fx 4259 point) er et
+// tilfældigt-udseende tal. Jacob bad om at runde til faste tiers i stedet
+// (500 / 1000 / 2000 / 5000 / 10000 / 20000 / 50000 / 100000), så en
+// oplevelse altid koster ét af disse "pæne" tal. Afrundingen sker i
+// LOG-skala (samme princip som kurven selv): fx 4259 (relativt tæt på 5000)
+// runder til 5000, mens 2225 (relativt tæt på 2000) runder til 2000 — se
+// samme kommentar/logik i skaerm-app/src/lib/pointsPricing.ts (HOLD I SYNC).
+export const POINT_TIERS = [500, 1000, 2000, 5000, 10000, 20000, 50000, 100000]
+
+export function snapToTier(rawPoints: number): number {
+  if (rawPoints <= POINT_TIERS[0]) return POINT_TIERS[0]
+  if (rawPoints >= POINT_TIERS[POINT_TIERS.length - 1]) return POINT_TIERS[POINT_TIERS.length - 1]
+  let closest = POINT_TIERS[0]
+  let closestLogDist = Infinity
+  for (const tier of POINT_TIERS) {
+    const dist = Math.abs(Math.log(rawPoints) - Math.log(tier))
+    if (dist < closestLogDist) {
+      closestLogDist = dist
+      closest = tier
+    }
+  }
+  return closest
+}
+
+/** Konverter en oplevelses værdi i kr. til dens pointpris via den degressive kurve, afrundet til nærmeste tier. */
 export function pointsForValue(valueDkk: number): number {
   if (!Number.isFinite(valueDkk) || valueDkk <= 0) return 0
-  return Math.round(valueDkk * interpolateRate(valueDkk))
+  const raw = Math.round(valueDkk * interpolateRate(valueDkk))
+  return snapToTier(raw)
 }
 
 // Den eneste konto, der ser godkendelses-skærmen i stedet for den normale
