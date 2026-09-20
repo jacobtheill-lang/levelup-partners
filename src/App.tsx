@@ -153,18 +153,21 @@ function App() {
       )}
 
       {session && session.user.email !== ADMIN_EMAIL && partner === null && (
-        // Vigtigt: onDone skal kalde refreshPartner() direkte (samme som
-        // ProfileScreens onSaved), IKKE setPartner(undefined) — den slags
-        // trigger kun useEffect'en ovenfor, som kun kører når `session`
-        // ændrer sig, ikke `partner`. Med setPartner(undefined) endte man
-        // permanent på "Henter…" efter oprettelse, fordi partneren aldrig
-        // blev hentet igen.
-        <OnboardingScreen user={session.user} onDone={refreshPartner} />
+        // onDone får partner-rækken direkte tilbage fra selve insertet og
+        // sætter den med det samme (setPartner) — IKKE et nyt kald til
+        // refreshPartner()/Supabase. Det sparer en hel ekstra tur til
+        // serveren, som ellers var grunden til at siden hang/føltes
+        // langsom lige efter man trykkede "Kom i gang". (Tidligere sad man
+        // her fast permanent på "Henter…", fordi onDone kaldte
+        // setPartner(undefined), som intet henter igen af sig selv.)
+        <OnboardingScreen user={session.user} onDone={setPartner} />
       )}
 
       {session && session.user.email !== ADMIN_EMAIL && partner && view.name === 'list' && (
         <RewardsListScreen
           partnerId={partner.id}
+          companyName={partner.company_name}
+          contactEmail={partner.contact_email}
           onCreate={() => setView({ name: 'create' })}
           onEdit={(reward) => setView({ name: 'edit', reward })}
           onRedeem={() => setView({ name: 'redemptions' })}

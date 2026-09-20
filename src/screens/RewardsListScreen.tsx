@@ -4,13 +4,15 @@ import { STATUS_LABEL, TIER_LABEL, type Reward } from '../types'
 
 interface Props {
   partnerId: string
+  companyName: string
+  contactEmail: string | null
   onCreate: () => void
   onEdit: (reward: Reward) => void
   onRedeem: () => void
   onProfile: () => void
 }
 
-export function RewardsListScreen({ partnerId, onCreate, onEdit, onRedeem, onProfile }: Props) {
+export function RewardsListScreen({ partnerId, companyName, contactEmail, onCreate, onEdit, onRedeem, onProfile }: Props) {
   const [rewards, setRewards] = useState<Reward[] | null>(null)
   const [error, setError] = useState<string | null>(null)
 
@@ -54,6 +56,13 @@ export function RewardsListScreen({ partnerId, onCreate, onEdit, onRedeem, onPro
         <p className="title-lg">Jeres oplevelser</p>
         <p className="subtle">
           {rewards === null ? 'Henter…' : `${rewards.length} oplevelse${rewards.length === 1 ? '' : 'r'} · ${totalRedemptions} indløst i alt`}
+        </p>
+        {/* Så man kan se, hvilken virksomhed man rent faktisk er logget ind
+            som — vigtigt hvis man har flere partnere/mails på samme
+            computer, eller bare ikke selv har oprettet login'et. */}
+        <p className="subtle" style={{ fontSize: '0.8rem', marginTop: 2 }}>
+          Logget ind som <strong>{companyName}</strong>
+          {contactEmail ? ` · ${contactEmail}` : ''}
         </p>
         <div style={{ display: 'flex', gap: 8, marginTop: 14, flexWrap: 'wrap' }}>
           <button type="button" className="btn btn-primary" onClick={onCreate}>

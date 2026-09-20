@@ -117,7 +117,7 @@ export function RewardFormScreen({ partnerId, existing, onSaved, onCancel }: Pro
       <p className="subtle" style={{ marginBottom: 18 }}>
         {existing
           ? 'Ændrer du noget herunder, skal oplevelsen godkendes af LevelUp igen, før ændringen er synlig for børnene.'
-          : 'Når du opretter oplevelsen, skal LevelUp lige godkende den (brand-fit + at pris/points passer), før den vises til børnene.'}
+          : 'Når du opretter oplevelsen, skal vi lige godkende den, for at sikre os, at den ser godt ud på appen.'}
       </p>
       <div className="info-box" style={{ marginBottom: 18 }}>
         <p style={{ margin: 0, fontWeight: 600 }}>Hvad slags oplevelser leder vi efter?</p>

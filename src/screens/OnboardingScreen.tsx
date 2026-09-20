@@ -2,10 +2,11 @@ import { useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { uploadPartnerLogo } from '../lib/uploadImage'
 import type { User } from '@supabase/supabase-js'
+import type { Partner } from '../types'
 
 interface Props {
   user: User
-  onDone: () => void
+  onDone: (partner: Partner) => void
 }
 
 export function OnboardingScreen({ user, onDone }: Props) {
@@ -33,17 +34,23 @@ export function OnboardingScreen({ user, onDone }: Props) {
       if (logoFile) {
         logoUrl = await uploadPartnerLogo(logoFile, user.id)
       }
-      const { error: err } = await supabase.from('partners').insert({
-        id: user.id,
-        company_name: companyName.trim(),
-        contact_email: user.email,
-        logo_url: logoUrl,
-        // Kun sat til true, hvis der rent faktisk er et logo at vise — et
-        // samtykke uden logo ville bare give en tom firkant på landingssiden.
-        show_on_landing: showOnLanding && logoUrl !== null,
-      })
+      const { data, error: err } = await supabase
+        .from('partners')
+        .insert({
+          id: user.id,
+          company_name: companyName.trim(),
+          contact_email: user.email,
+          logo_url: logoUrl,
+          // Kun sat til true, hvis der rent faktisk er et logo at vise — et
+          // samtykke uden logo ville bare give en tom firkant på landingssiden.
+          show_on_landing: showOnLanding && logoUrl !== null,
+        })
+        .select()
+        .single()
       if (err) throw err
-      onDone()
+      // Giv partner-rækken tilbage med det samme i stedet for at bede App
+      // om at hente den igen — én tur til Supabase i stedet for to.
+      onDone(data as Partner)
     } catch {
       setError('Kunne ikke oprette profilen. Prøv igen.')
     } finally {
