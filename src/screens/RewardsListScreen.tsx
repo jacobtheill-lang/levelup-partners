@@ -118,7 +118,7 @@ export function RewardsListScreen({ partnerId, companyName, contactEmail, onCrea
                 </div>
                 {r.status === 'pending' && (
                   <p className="subtle" style={{ marginTop: 4, fontSize: '0.8rem' }}>
-                    Synlig for børn, så snart Jacob har godkendt den.
+                    Synlig for børn, så snart vi har godkendt den.
                   </p>
                 )}
                 {r.status === 'rejected' && (

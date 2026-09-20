@@ -91,6 +91,8 @@ function App() {
               background: '#ffb703',
               borderRadius: 10,
               transform: 'rotate(-6deg)',
+              border: '1.5px solid #2b2420',
+              boxShadow: '2px 2px 0 #2b2420',
             }}
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2b2420" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
