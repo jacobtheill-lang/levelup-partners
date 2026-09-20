@@ -153,7 +153,13 @@ function App() {
       )}
 
       {session && session.user.email !== ADMIN_EMAIL && partner === null && (
-        <OnboardingScreen user={session.user} onDone={() => setPartner(undefined)} />
+        // Vigtigt: onDone skal kalde refreshPartner() direkte (samme som
+        // ProfileScreens onSaved), IKKE setPartner(undefined) — den slags
+        // trigger kun useEffect'en ovenfor, som kun kører når `session`
+        // ændrer sig, ikke `partner`. Med setPartner(undefined) endte man
+        // permanent på "Henter…" efter oprettelse, fordi partneren aldrig
+        // blev hentet igen.
+        <OnboardingScreen user={session.user} onDone={refreshPartner} />
       )}
 
       {session && session.user.email !== ADMIN_EMAIL && partner && view.name === 'list' && (
