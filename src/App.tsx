@@ -77,7 +77,7 @@ function App() {
     <div className="portal">
       <div className="portal-topbar">
         <a
-          href="https://mit-levelup.vercel.app/landing.html"
+          href="https://levelupmoments.dk"
           title="Til landingssiden"
           style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}
         >
@@ -120,8 +120,11 @@ function App() {
 
       {session === null && (
         <>
-          <PartnerInfoScreen />
+          <p className="subtle" style={{ textAlign: 'center', fontWeight: 700 }}>
+            Log ind eller opret jer med jeres e-mail herunder ↓
+          </p>
           <LoginScreen />
+          <PartnerInfoScreen />
         </>
       )}
 

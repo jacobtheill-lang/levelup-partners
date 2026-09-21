@@ -19,9 +19,9 @@ export function PartnerInfoScreen() {
         <p style={{ fontWeight: 700, fontSize: '0.95rem', margin: '0 0 10px' }}>Sådan fungerer indløsning</p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           {[
-            { n: 1, text: 'I opretter jeres oplevelse her i portalen — navn, billede, beskrivelse og hvor mange point den koster.' },
-            { n: 2, text: 'Børn ser den i appens katalog og reserverer den med deres point. Den lægges under "Mine oplevelser" — endnu ikke brugt.' },
-            { n: 3, text: 'Når de kommer forbi hos jer, åbner de oplevelsen og trykker "Indløs". I ser koden/QR-koden på deres skærm som bekræftelse.' },
+            { n: 1, text: 'I opretter jeres oplevelse her i portalen — navn, billede, beskrivelse, udløbsdato og antal.' },
+            { n: 2, text: 'Børn ser den i appens katalog og reserverer den med deres points. Den lægges under "Mine oplevelser" i barnets app — klar til brug.' },
+            { n: 3, text: 'Når børnene kommer forbi hos jer, åbner de oplevelsen og trykker "Indløs". I ser en kode på deres skærm som bekræftelse på indløsningen.' },
           ].map((step) => (
             <div key={step.n} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
               <div
@@ -54,10 +54,6 @@ export function PartnerInfoScreen() {
           logget ind.
         </p>
       </div>
-
-      <p className="subtle" style={{ margin: 0, fontWeight: 600 }}>
-        Klar til at komme i gang? Log ind eller opret jer med jeres e-mail herunder ↓
-      </p>
     </div>
   )
 }
