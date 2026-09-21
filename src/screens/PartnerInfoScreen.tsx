@@ -11,7 +11,7 @@ export function PartnerInfoScreen() {
         <p className="subtle">
           I opretter en eller flere rigtige oplevelser — en is, en biografbillet, en klatretime —
           som børn i LevelUp kan låse op med point, de har optjent ved at løse skoleopgaver.
-          I får synlige, motiverede unge kunder forbi. Det koster ikke noget at være med.
+          I får motiverede børn forbi, som kommer til at kende og tale om jeres forretning. Det koster ikke noget at være med.
         </p>
       </div>
 
