@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import type { Session } from '@supabase/supabase-js'
 import { supabase, supabaseConfigured } from './lib/supabase'
 import { LoginScreen } from './screens/LoginScreen'
+import { PartnerInfoScreen } from './screens/PartnerInfoScreen'
 import { OnboardingScreen } from './screens/OnboardingScreen'
 import { RewardsListScreen } from './screens/RewardsListScreen'
 import { RewardFormScreen } from './screens/RewardFormScreen'
@@ -117,7 +118,12 @@ function App() {
 
       {session === undefined && <p className="subtle">Henter…</p>}
 
-      {session === null && <LoginScreen />}
+      {session === null && (
+        <>
+          <PartnerInfoScreen />
+          <LoginScreen />
+        </>
+      )}
 
       {session && session.user.email === ADMIN_EMAIL && (
         <>

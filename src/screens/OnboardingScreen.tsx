@@ -68,7 +68,8 @@ export function OnboardingScreen({ user, onDone }: Props) {
       <div className="info-box" style={{ marginBottom: 18 }}>
         <p style={{ margin: 0 }}>
           LevelUp handler om rigtige oplevelser, børn og familier oplever sammen — ikke bare
-          slik og sodavand. I opretter jeres første oplevelse på næste skærm.
+          slik og sodavand. En oplevelse kan godt indeholde begge — det bestemmer I. I opretter
+          jeres første oplevelse på næste skærm.
         </p>
       </div>
       <form onSubmit={handleSubmit}>

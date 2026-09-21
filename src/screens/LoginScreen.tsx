@@ -64,7 +64,6 @@ export function LoginScreen() {
         <div className="field">
           <label htmlFor="email">E-mail</label>
           <input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
-          <p className="field-hint">Mailen med login-linket kommer fra Supabase.</p>
         </div>
         {error && <div className="error-box" style={{ marginBottom: 14 }}>{error}</div>}
         <button type="submit" className="btn btn-primary btn-block" disabled={busy}>
