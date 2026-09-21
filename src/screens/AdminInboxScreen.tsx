@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
+import { formatDateTime as formatDate } from '../lib/formatDate'
 
 interface FeedbackRow {
   id: string
@@ -17,10 +18,6 @@ interface ContactRow {
 }
 
 type Tab = 'feedback' | 'contact'
-
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleString('da-DK', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
-}
 
 // Kun til Jacob — se admin_can_read-policies i
 // supabase/migration-admin-inbox-analytics.sql. To kilder samlet ét sted:

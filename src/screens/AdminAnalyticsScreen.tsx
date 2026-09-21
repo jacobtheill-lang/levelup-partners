@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
+import { formatDate } from '../lib/formatDate'
 
 interface HourCount { hour: number; count: number }
 interface WeekdayCount { weekday: number; count: number }
@@ -143,7 +144,7 @@ export function AdminAnalyticsScreen() {
               </p>
             </div>
             <div className="subtle" style={{ fontSize: '0.8rem', textAlign: 'right' }}>
-              {c.last_active ? `Sidst aktiv ${new Date(c.last_active).toLocaleDateString('da-DK')}` : 'Ikke startet'}
+              {c.last_active ? `Sidst aktiv ${formatDate(c.last_active)}` : 'Ikke startet'}
             </div>
           </div>
         ))}

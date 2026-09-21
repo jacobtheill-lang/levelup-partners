@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
+import { formatDateTime } from '../lib/formatDate'
 
 interface Props {
   partnerId: string
@@ -70,12 +71,12 @@ export function RedemptionsLogScreen({ partnerId, onBack }: Props) {
                 {row.child_name} · {row.points_spent} point · kode {row.code}
               </p>
               <p className="reward-row-meta">
-                Valgt {new Date(row.created_at).toLocaleString('da-DK')}
+                Valgt {formatDateTime(row.created_at)}
               </p>
             </div>
             <span className={`badge ${row.used ? 'badge-active' : 'badge-inactive'}`}>
               {row.used && row.used_at
-                ? `Indløst ${new Date(row.used_at).toLocaleString('da-DK')}`
+                ? `Indløst ${formatDateTime(row.used_at)}`
                 : 'Afventer indløsning'}
             </span>
           </div>
